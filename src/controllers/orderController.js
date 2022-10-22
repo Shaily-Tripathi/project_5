@@ -1,3 +1,4 @@
+//======================================================= Importing modules/pacakages here=========================================
 const { isValidObjectId } = require('mongoose')
 const userModel = require("../models/userModel");
 const cartModel = require('../models/cartModel')
@@ -5,7 +6,7 @@ const orderModel = require('../models/orderModel')
 const { isValidRequestBody } = require('../validators/userValidation')
 
 
-// =================================Order Create==============================================
+// ===========================================================Create Order===========================================================
 const createOrder = async function (req, res) {
     try {
         let userId = req.params.userId
@@ -13,27 +14,21 @@ const createOrder = async function (req, res) {
         let { cartId, cancellable, status } = requestBody
 
         if (!isValidRequestBody(requestBody))
-            return res.status(400)
-                .send({ status: false, message: "request Body cant be emp" })
+            return res.status(400).send({ status: false, message: "request Body cant be emp" })
 
         if (!isValidObjectId(cartId))
-            return res.status(400)
-                .send({ status: false, message: "cart Id is not valid " })
+            return res.status(400).send({ status: false, message: "cart Id is not valid " })
 
         let findUserCart = await cartModel.findOne({ userId: userId }).select({ createdAt: 0, updatedAt: 0, __v: 0 }).lean()
 
         if (!findUserCart)
-            return res.status(404)
-                .send({ status: false, message: "Requested User Cart Not found" })
+            return res.status(404).send({ status: false, message: "Requested User Cart Not found" })
 
         if (findUserCart.items.length == 0)
-            return res.status(404)
-                .send({ status: false, message: "No any product or Items in your Cart" })
-
+            return res.status(404).send({ status: false, message: "No any product or Items in your Cart" })
 
         if (cartId != findUserCart._id)
-            return res.status(400)
-                .send({ status: false, message: "Access denied, this is not your cart" })
+            return res.status(400).send({ status: false, message: "Access denied, this is not your cart" })
 
 
         let totalQuantity = 0
@@ -46,8 +41,7 @@ const createOrder = async function (req, res) {
 
         if (cancellable) {
             if (!(cancellable == true || cancellable == false)) {
-                return res.status(400)
-                    .send({ status: false, message: "cancellable value is true or false only" })
+                return res.status(400).send({ status: false, message: "cancellable value is true or false only" })
             }
             findUserCart.cancellable = cancellable
         }
@@ -57,8 +51,7 @@ const createOrder = async function (req, res) {
         }
         if (status) {
             if (!isValideStatus(status))
-                return res.status(400)
-                    .send({ status: false, message: "status Value should be [pending, completed, cancled]" })
+                return res.status(400).send({ status: false, message: "status Value should be [pending, completed, cancled]" })
 
             findUserCart.status = status
         }
@@ -82,7 +75,7 @@ const createOrder = async function (req, res) {
 
 
 
-// =====================================Order Update================================================
+// ========================================================Update Order===============================================================
 
 const updateOrderDetails = async function (req, res) {
     try {
@@ -176,6 +169,5 @@ const updateOrderDetails = async function (req, res) {
     }
 }
 
-
-
+//=================================== Exported all the function here=======================================
 module.exports = { createOrder, updateOrderDetails }

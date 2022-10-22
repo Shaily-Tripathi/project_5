@@ -34,9 +34,4 @@ router.post("/users/:userId/orders",authentication,authorization, createOrder)
 router.put('/users/:userId/orders',authentication,authorization, updateOrderDetails)
 
 
-
-
-
-
-
 module.exports = router

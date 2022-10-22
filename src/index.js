@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(multer().any());
 
 // connect to database
-mongoose.connect("mongodb+srv://ShailyTripathi:ShailyCompass2125@shailytripathi.ifjbsp5.mongodb.net/group24Database?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://ShailyTripathi:ShailyCompass2125@shailytripathi.ifjbsp5.mongodb.net/project5Database?retryWrites=true&w=majority", {
     useNewUrlParser: true
 })
     .then(() => console.log("MongoDb is connected"))
@@ -25,6 +25,6 @@ app.use("/*", function (req, res) {
     res.status(400).send({ status: false, message: "The api you request is not available" })
 });
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log('Express app running on port ' + (process.env.PORT || 3000))
+app.listen(3000, function () {
+    console.log('Express app running on port ' + (3000))
 });
