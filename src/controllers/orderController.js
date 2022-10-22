@@ -14,7 +14,7 @@ const createOrder = async function (req, res) {
         let { cartId, cancellable, status } = requestBody
 
         if (!isValidRequestBody(requestBody))
-            return res.status(400).send({ status: false, message: "request Body cant be emp" })
+            return res.status(400).send({ status: false, message: "request Body can't be emp" })
 
         if (!isValidObjectId(cartId))
             return res.status(400).send({ status: false, message: "cart Id is not valid " })
@@ -64,8 +64,7 @@ const createOrder = async function (req, res) {
         }
 
         let order = await orderModel.findOne({ userId: userId }).populate('items.productId')
-        return res.status(201)
-            .send({ status: true, message: "Success", data: order })
+        return res.status(201).send({ status: true, message: "Success", data: order })
     }
     catch (err) {
 

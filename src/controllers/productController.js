@@ -2,7 +2,7 @@
 const productModel = require("../models/productModel")
 const { uploadFile } = require("../aws/aws")
 const mongoose = require('mongoose')
-const { isValidImage, isValid, isValidSizes, isValidObjectId, isValidRequestBody, isValidTitle, isValidPrice, isValidStyle } = require("../validators/productValidation")
+const { isValidImage, isValid, isValidSizes, isValidObjectId, isValidRequestBody, isValidPrice, isValidStyle } = require("../validators/productValidation")
 
 //=============================== CREATE PRODUCT ======================================================
 const createProduct = async function (req, res) {
@@ -11,12 +11,12 @@ const createProduct = async function (req, res) {
         let files = req.files
 
         if (!isValidRequestBody(data)) {
-            return res.status(400).send({ status: false, message: "request Body cant be empty" });
+            return res.status(400).send({ status: false, message: "request Body can't be empty" });
         }
 
         //destructuring of data object
         let { title, description, price, currencyId, currencyFormat, isFreeShipping,
-            style, availableSizes, installments, productImage } = data
+            style, availableSizes, installments } = data
 
         //title validation
         if (!title)
@@ -228,7 +228,7 @@ const getProductDetailsById = async function (req, res) {
 
         //validation of productID
         if (!productId)
-            return res.status.send({ status: false, message: "Not a valid Product Id" })
+            return res.status(400).send({ status: false, message: "Please give productId" })
 
         if (!isValidObjectId(productId))
             return res.status(400).send({ status: false, message: "ProductId is  Invalid" })
@@ -236,7 +236,7 @@ const getProductDetailsById = async function (req, res) {
         let productData = await productModel.findById({ _id: productId })
 
         if (!productData || productData.isDeleted === true)
-            return res.status(404).send({ status: false, msg: "No product exits" })
+            return res.status(404).send({ status: false, message: "No product exits" })
 
 
         return res.status(200).send({ status: true, message: 'Success', data: productData })
@@ -398,11 +398,13 @@ const deleteProductById = async function (req, res) {
 
         let product = await productModel.findOne({ _id: productId })
 
+        if (!product)
+            return res.status(404).send({ status: false, message: " Product not found" })
+
         if (product.isDeleted == true)
             return res.status(400).send({ status: true, message: "Product is already deleted" })
 
-        if (!product)
-            return res.status(404).send({ status: false, message: " Product not found" })
+        
 
         await productModel.findOneAndUpdate({ _id: productId, isDeleted: false }, { $set: { isDeleted: true, deletedAt: Date.now() } })
 

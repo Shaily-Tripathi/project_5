@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String, 
-        // required: true
     }, // s3 link
     phone: {
         type: String, 

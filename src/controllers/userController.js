@@ -4,9 +4,7 @@ const { uploadFile } = require("../aws/aws")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { isvalidAddressLength, isValid, isValidRequestBody, isValidObjectId, isValidEmail, isValidName,
-    isValidPass, isValidPhone, isValidStreet, isValidPincode, isValidImage } = require("../validators/userValidation");
-const { json } = require("express");
-
+    isValidPass, isValidPhone, isValidStreet, isValidPincode, isValidImage } = require("../validators/userValidation")
 //=====================================================CREATE USER===================================================================
 
 const createUser = async function (req, res) {
@@ -17,7 +15,7 @@ const createUser = async function (req, res) {
         if (!isValidRequestBody(reqBody))
             return res.status(400).send({ status: false, message: "Please provide data in request body!" });
 
-        const { fname, lname, email, password, phone, address, profileImage } = reqBody //destructuring
+        const { fname, lname, email, password, phone, address } = reqBody //destructuring
 
         let files = req.files;
 

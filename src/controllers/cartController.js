@@ -170,6 +170,11 @@ const updateCart = async function (req, res) {
 
         let findProduct = await productModel.findOne({ _id: productId, isDeleted: false })
 
+        if (!findProduct)
+            return res.status(404).send({ status: false, message: " product not found" })
+
+
+        removeProduct = Number(removeProduct)
         if (typeof removeProduct != "number")
             return res.status(400).send({ status: false, message: " removeProduct Value Should be Number " })
 
@@ -237,6 +242,7 @@ const getCartDeltail = async function (req, res) {
             return res.status(403).send({ status: false, message: "user is not authorised" });
 
         let cartData = await cartModel.findOne({ userId: userId }).populate('items.productId')
+        
         if (!cartData) return res.status(400).send({ status: false, message: "No cart data" })
 
         return res.status(200).send({ status: true, message: 'Success', data: cartData })
